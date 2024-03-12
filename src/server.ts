@@ -1,12 +1,11 @@
 import { app } from "./app"
-//npm i typescript @types/node tsx tsup -D
-//npx tsc --init
-//npm i fastify
-
+import {env} from "./env/index"
+//npm i dotenv
+//npm i zod
 
 app.listen({
   host: '0.0.0.0',
-  port: 3333,
+  port: env.PORT,
 }).then(() => {
   console.log('server listening🚀')
 })
