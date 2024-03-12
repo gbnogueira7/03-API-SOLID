@@ -8,5 +8,5 @@ app
     port: env.PORT,
   })
   .then(() => {
-    console.log('server listening🚀')
+    console.log('HTTP server listening🚀')
   })
