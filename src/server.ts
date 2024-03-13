@@ -1,9 +1,9 @@
 import { app } from './app'
 import { env } from './env/index'
-// npm i prisma -D
-// npx prisma init
-// npx prisma generate (após criar o model)
-// npm i @prisma/client
+
+// npm i bcryptjs
+//npm i -D @types/bcryptjs
+
 app
   .listen({
     host: '0.0.0.0',
