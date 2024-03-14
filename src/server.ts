@@ -1,8 +1,7 @@
 import { app } from './app'
 import { env } from './env/index'
 
-// npm i bcryptjs
-//npm i -D @types/bcryptjs
+// npm i vitest vite-tsconfig-paths -D
 
 app
   .listen({
