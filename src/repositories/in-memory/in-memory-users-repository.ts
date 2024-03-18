@@ -21,16 +21,9 @@ export class InMemoryRepository implements UsersRepository {
       password_hash: data.password_hash,
       created_at: new Date(),
     }
+    // push é um método designado a arrays, para implementar objetos ao array
     this.items.push(user)
 
     return user
   }
 }
-
-// const registerService = new RegisterService({
-//  async findByEmail(email) {
-//  return null
-// },
-
-//
-// })

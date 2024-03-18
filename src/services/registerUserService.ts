@@ -15,6 +15,7 @@ interface RegisterServiceResponse {
 
 export class RegisterService {
   constructor(private usersRepository: UsersRepository) {}
+  // o método execute existe basicamente para quando formos usar a classe, darmos um execute com os dados vindos do body, e assim, obtêlos para usar dentro do service, e só executarmos o create após
   async execute({
     name,
     email,
@@ -26,7 +27,7 @@ export class RegisterService {
     if (userWithSameEmail) {
       throw new UserAlreadyExistsError()
     }
-
+    // note que chamamos a usersRepository, nela que executamos o create, que é a interface que está sendo implementada na classe que se conecta ao banco de dados
     const user = await this.usersRepository.create({
       email,
       name,
