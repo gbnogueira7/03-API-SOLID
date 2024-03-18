@@ -1,16 +1,22 @@
-import { expect, describe, it } from 'vitest'
-import { InMemoryRepository } from '@/repositories/in-memory/in-memory-users-repository'
+import { expect, describe, it, beforeEach } from 'vitest'
+import { InMemoryUsersRepository } from '@/repositories/in-memory/in-memory-users-repository'
 import { AuthenticateService } from './athenticateService'
 import { hash } from 'bcryptjs'
 import { InvalidCredentialsError } from './errors/invalid-credential-error'
 
+// Aqui eu estou tipando minhas variáveis com classes, o que faz com que quando os its rodarem, antes irá criar uma instância da qual essas variáveis derivam, o que faz com que elas rodem os métodos que atribuem automáticamente
+
+let usersRepository: InMemoryUsersRepository
+let authenticateService: AuthenticateService
+
 describe('Register Service', () => {
+  beforeEach(() => {
+    // cria instâncias
+    usersRepository = new InMemoryUsersRepository()
+    authenticateService = new AuthenticateService(usersRepository)
+  })
   it('Should be able authenticate', async () => {
-    const inMemoryUsersRepository = new InMemoryRepository()
-
-    const authenticateService = new AuthenticateService(inMemoryUsersRepository)
-
-    inMemoryUsersRepository.create({
+    usersRepository.create({
       name: 'john',
       email: 'john@rocketseat.com',
       password_hash: await hash('1234567', 6),
@@ -25,10 +31,6 @@ describe('Register Service', () => {
   })
 
   it('Should be not able to authenticate with wrong e-mail', async () => {
-    const inMemoryUsersRepository = new InMemoryRepository()
-
-    const authenticateService = new AuthenticateService(inMemoryUsersRepository)
-
     expect(() =>
       authenticateService.execute({
         email: 'john@rocketseat123.com',
@@ -38,11 +40,7 @@ describe('Register Service', () => {
   })
 
   it('Should not be able authenticate with wrong password', async () => {
-    const inMemoryUsersRepository = new InMemoryRepository()
-
-    const authenticateService = new AuthenticateService(inMemoryUsersRepository)
-
-    inMemoryUsersRepository.create({
+    usersRepository.create({
       name: 'john',
       email: 'john@rocketseat.com',
       password_hash: await hash('1234567', 6),
