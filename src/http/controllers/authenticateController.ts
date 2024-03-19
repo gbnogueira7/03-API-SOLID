@@ -1,8 +1,7 @@
 import { z } from 'zod'
 import { FastifyRequest, FastifyReply } from 'fastify'
-import { PrismaUsersRepository } from '@/repositories/prisma/prisma-users-respository'
-import { AuthenticateService } from '@/services/athenticateService'
 import { InvalidCredentialsError } from '@/services/errors/invalid-credential-error'
+import { makeAuthenticateService } from '@/services/factories/make-authenticate-service'
 
 export async function authenticate(
   request: FastifyRequest,
@@ -17,8 +16,7 @@ export async function authenticate(
 
   try {
     // por algum motivo se eu chamar uma interface dentro de uma classe como parâmetro do meu constructor, se eu executar essa classe usando como parâmetp uma outra classe que implementa a interface, eu consigo executar um método que esta na classe que implementa a interface
-    const prismaUsersRepository = new PrismaUsersRepository()
-    const authenticateService = new AuthenticateService(prismaUsersRepository)
+    const authenticateService = makeAuthenticateService()
     await authenticateService.execute({
       email,
       password,
