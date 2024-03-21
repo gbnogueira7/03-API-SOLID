@@ -31,7 +31,7 @@ describe('Register Service', () => {
   })
 
   it('Should be not able to authenticate with wrong e-mail', async () => {
-    expect(() =>
+    await expect(() =>
       authenticateService.execute({
         email: 'john@rocketseat123.com',
         password: '1234567',
@@ -46,7 +46,7 @@ describe('Register Service', () => {
       password_hash: await hash('1234567', 6),
     })
 
-    expect(() =>
+    await expect(() =>
       authenticateService.execute({
         email: 'john@rocketseat.com',
         password: '12345678',
