@@ -3,13 +3,15 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { InMemoryCheckinRepository } from '@/repositories/in-memory/in-memory-checkins-repository'
 import { InMemoryGymRepository } from '@/repositories/in-memory/im-memory-gym-repository'
 import { Decimal } from '@prisma/client/runtime/library'
+import { MaxNumberCheckinsError } from './errors/max-number-checkins'
+import { MaxDistanceError } from './errors/max-distance-error'
 
 let checkinsRepository: InMemoryCheckinRepository
 let gymRepository: InMemoryGymRepository
 let checkinService: CheckinService
 
 describe('Register Service', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     // cria instâncias
     checkinsRepository = new InMemoryCheckinRepository()
     gymRepository = new InMemoryGymRepository()
@@ -17,13 +19,13 @@ describe('Register Service', () => {
 
     vi.useFakeTimers()
 
-    gymRepository.items.push({
+    await gymRepository.create({
       id: 'gym-01',
       title: '',
       description: '',
       phone: '',
-      latitude: new Decimal(-23.0260736),
-      longitude: new Decimal(-43.4733056),
+      latitude: -23.0260736,
+      longitude: -43.4733056,
     })
   })
   afterEach(() => {
@@ -56,7 +58,7 @@ describe('Register Service', () => {
         userLatitude: -23.0260736,
         userLongitude: -43.4733056,
       }),
-    ).rejects.toBeInstanceOf(Error)
+    ).rejects.toBeInstanceOf(MaxNumberCheckinsError)
   })
   // Para realização da função acima e abaixo estamos usando o método TDD, que consistem em criar testes para que os problemas no qual estamos sejam resolvidos, essa metodologia diz que temos 3 fases "red", 'green' e "refactor", note que o problema acima foi solucionado no ponto que estamos, mas foi gerado outro problema, o qual corresponde com o teste abaixo, pois nosso objetivo foi sair do "red", erro no teste, para o green, teste passando, agora iremos para o refactor, no qual iremos aprimorar nosso código,
   it('Should be able check-in twice but in different days', async () => {
@@ -97,6 +99,6 @@ describe('Register Service', () => {
         userLatitude: -23.0260736,
         userLongitude: -43.4733056,
       }),
-    ).rejects.toBeInstanceOf(Error)
+    ).rejects.toBeInstanceOf(MaxDistanceError)
   })
 })
