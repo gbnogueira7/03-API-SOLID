@@ -22,8 +22,8 @@ describe('Register Service', () => {
       title: '',
       description: '',
       phone: '',
-      latitude: new Decimal(0),
-      longitude: new Decimal(0),
+      latitude: new Decimal(-23.0260736),
+      longitude: new Decimal(-43.4733056),
     })
   })
   afterEach(() => {
@@ -34,8 +34,8 @@ describe('Register Service', () => {
     const { checkIn } = await checkinService.execute({
       userId: '1',
       gymId: 'gym-01',
-      userAltitude: 0,
-      userLongitude: 0,
+      userLatitude: -23.0260736,
+      userLongitude: -43.4733056,
     })
     expect(checkIn.id).toEqual(expect.any(String))
   })
@@ -45,16 +45,16 @@ describe('Register Service', () => {
     await checkinService.execute({
       userId: 'user-01',
       gymId: 'gym-01',
-      userAltitude: 0,
-      userLongitude: 0,
+      userLatitude: -23.0260736,
+      userLongitude: -43.4733056,
     })
 
     await expect(() =>
       checkinService.execute({
         userId: 'user-01',
         gymId: 'gym-01',
-        userAltitude: 0,
-        userLongitude: 0,
+        userLatitude: -23.0260736,
+        userLongitude: -43.4733056,
       }),
     ).rejects.toBeInstanceOf(Error)
   })
@@ -65,8 +65,8 @@ describe('Register Service', () => {
     await checkinService.execute({
       userId: 'user-01',
       gymId: 'gym-01',
-      userAltitude: 0,
-      userLongitude: 0,
+      userLatitude: -23.0260736,
+      userLongitude: -43.4733056,
     })
 
     vi.setSystemTime(new Date(2022, 0, 21, 8, 0, 0))
@@ -74,9 +74,29 @@ describe('Register Service', () => {
     const { checkIn } = await checkinService.execute({
       userId: 'user-01',
       gymId: 'gym-01',
-      userAltitude: 0,
-      userLongitude: 0,
+      userLatitude: -23.0260736,
+      userLongitude: -43.4733056,
     })
     expect(checkIn.id).toEqual(expect.any(String))
+  })
+
+  it('Should not be able create check-in on distant gym', async () => {
+    gymRepository.items.push({
+      id: 'gym-02',
+      title: '',
+      description: '',
+      phone: '',
+      latitude: new Decimal(-22.95555),
+      longitude: new Decimal(-43.3886769),
+    })
+
+    expect(() =>
+      checkinService.execute({
+        userId: '1',
+        gymId: 'gym-02',
+        userLatitude: -23.0260736,
+        userLongitude: -43.4733056,
+      }),
+    ).rejects.toBeInstanceOf(Error)
   })
 })
