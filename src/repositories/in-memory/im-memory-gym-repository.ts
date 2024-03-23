@@ -1,6 +1,5 @@
 import { Gym, Prisma } from '@prisma/client'
 import { GymRepository } from '../gym-repository'
-import { Decimal } from '@prisma/client/runtime/library'
 import { randomUUID } from 'crypto'
 
 export class InMemoryGymRepository implements GymRepository {
