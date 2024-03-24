@@ -45,6 +45,5 @@ describe('Fetch User Check-in History Service', () => {
       expect.objectContaining({ gym_id: 'gym21' }),
       expect.objectContaining({ gym_id: 'gym22' }),
     ])
-
   })
 })
