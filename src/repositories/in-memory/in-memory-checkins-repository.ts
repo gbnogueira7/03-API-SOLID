@@ -6,6 +6,28 @@ import dayjs from 'dayjs'
 export class InMemoryCheckinRepository implements checkinsRepository {
   public items: CheckIn[] = []
 
+  async save(checkIn: CheckIn) {
+    const checkInIndex = await this.items.findIndex(
+      (item) => item.id === checkIn.id,
+    )
+
+    if (checkInIndex >= 0) {
+      this.items[checkInIndex] = checkIn
+    }
+
+    return checkIn
+  }
+
+  async findById(id: string) {
+    const checkIn = this.items.find((item) => item.id === id)
+
+    if (!checkIn) {
+      return null
+    }
+
+    return checkIn
+  }
+
   async countByUserId(userId: string) {
     return this.items.filter((items) => items.user_id === userId).length
   }
