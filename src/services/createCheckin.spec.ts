@@ -1,4 +1,4 @@
-import { CheckinService } from './checkinService'
+import { CreateCheckinService } from './createCheckinService'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { InMemoryCheckinRepository } from '@/repositories/in-memory/in-memory-checkins-repository'
 import { InMemoryGymRepository } from '@/repositories/in-memory/im-memory-gym-repository'
@@ -8,14 +8,17 @@ import { MaxDistanceError } from './errors/max-distance-error'
 
 let checkinsRepository: InMemoryCheckinRepository
 let gymRepository: InMemoryGymRepository
-let checkinService: CheckinService
+let createCheckinService: CreateCheckinService
 
 describe('Register Service', () => {
   beforeEach(async () => {
     // cria instâncias
     checkinsRepository = new InMemoryCheckinRepository()
     gymRepository = new InMemoryGymRepository()
-    checkinService = new CheckinService(checkinsRepository, gymRepository)
+    createCheckinService = new CreateCheckinService(
+      checkinsRepository,
+      gymRepository,
+    )
 
     vi.useFakeTimers()
 
@@ -33,7 +36,7 @@ describe('Register Service', () => {
   })
 
   it('Should be able create check-in', async () => {
-    const { checkIn } = await checkinService.execute({
+    const { checkIn } = await createCheckinService.execute({
       userId: '1',
       gymId: 'gym-01',
       userLatitude: -23.0260736,
@@ -44,7 +47,7 @@ describe('Register Service', () => {
   it('Should not be able check-in twice un unique day', async () => {
     vi.setSystemTime(new Date(2022, 0, 20, 8, 0, 0))
 
-    await checkinService.execute({
+    await createCheckinService.execute({
       userId: 'user-01',
       gymId: 'gym-01',
       userLatitude: -23.0260736,
@@ -52,7 +55,7 @@ describe('Register Service', () => {
     })
 
     await expect(() =>
-      checkinService.execute({
+      createCheckinService.execute({
         userId: 'user-01',
         gymId: 'gym-01',
         userLatitude: -23.0260736,
@@ -64,7 +67,7 @@ describe('Register Service', () => {
   it('Should be able check-in twice but in different days', async () => {
     vi.setSystemTime(new Date(2022, 0, 20, 8, 0, 0))
 
-    await checkinService.execute({
+    await createCheckinService.execute({
       userId: 'user-01',
       gymId: 'gym-01',
       userLatitude: -23.0260736,
@@ -73,7 +76,7 @@ describe('Register Service', () => {
 
     vi.setSystemTime(new Date(2022, 0, 21, 8, 0, 0))
 
-    const { checkIn } = await checkinService.execute({
+    const { checkIn } = await createCheckinService.execute({
       userId: 'user-01',
       gymId: 'gym-01',
       userLatitude: -23.0260736,
@@ -93,7 +96,7 @@ describe('Register Service', () => {
     })
 
     expect(() =>
-      checkinService.execute({
+      createCheckinService.execute({
         userId: '1',
         gymId: 'gym-02',
         userLatitude: -23.0260736,

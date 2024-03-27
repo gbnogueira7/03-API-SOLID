@@ -16,7 +16,7 @@ interface CheckinServiceResponse {
   checkIn: CheckIn
 }
 
-export class CheckinService {
+export class CreateCheckinService {
   constructor(
     private checkinRepository: checkinsRepository,
     private gymRepository: GymRepository,
