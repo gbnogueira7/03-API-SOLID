@@ -1,7 +1,7 @@
 import { z } from 'zod'
 import { FastifyRequest, FastifyReply } from 'fastify'
 import { InvalidCredentialsError } from '@/services/errors/invalid-credential-error'
-import { makeAuthenticateService } from '@/services/factories/make-authenticate-service'
+import { makeAuthenticateService } from '@/services/factories/make-authenticate-factorie'
 
 export async function authenticate(
   request: FastifyRequest,
@@ -17,9 +17,21 @@ export async function authenticate(
   try {
     // por algum motivo se eu chamar uma interface dentro de uma classe como parâmetro do meu constructor, se eu executar essa classe usando como parâmetp uma outra classe que implementa a interface, eu consigo executar um método que esta na classe que implementa a interface
     const authenticateService = makeAuthenticateService()
-    await authenticateService.execute({
+    const { user } = await authenticateService.execute({
       email,
       password,
+    })
+
+    const token = await reply.jwtSign(
+      {},
+      {
+        sign: {
+          sub: user.id,
+        },
+      },
+    )
+    return reply.status(200).send({
+      token,
     })
   } catch (err) {
     if (err instanceof InvalidCredentialsError) {
@@ -27,6 +39,4 @@ export async function authenticate(
     }
     throw err
   }
-
-  return reply.status(200).send()
 }

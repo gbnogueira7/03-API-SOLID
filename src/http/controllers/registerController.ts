@@ -1,7 +1,7 @@
 import { z } from 'zod'
 import { FastifyRequest, FastifyReply } from 'fastify'
 import { UserAlreadyExistsError } from '@/services/errors/user-already-exists-error'
-import { makeRegisterService } from '@/services/factories/make-register-service'
+import { MakeRegisterFactorie } from '@/services/factories/make-register-factorie'
 
 export async function register(request: FastifyRequest, reply: FastifyReply) {
   const registerBodySchema = z.object({
@@ -14,7 +14,7 @@ export async function register(request: FastifyRequest, reply: FastifyReply) {
 
   try {
     // por algum motivo se eu chamar uma interface dentro de uma classe como parâmetro do meu constructor, se eu executar essa classe usando como parâmetp uma outra classe que implementa a interface, eu consigo executar um método que esta na classe que implementa a interface
-    const registerService = makeRegisterService()
+    const registerService = MakeRegisterFactorie()
     await registerService.execute({
       name,
       email,
