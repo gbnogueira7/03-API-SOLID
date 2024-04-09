@@ -1,14 +1,14 @@
 import { InMemoryGymRepository } from '@/repositories/in-memory/im-memory-gym-repository'
 import { beforeEach, describe, expect, it } from 'vitest'
-import { SearchGymsService } from './searchGyms'
+import { SearchGymService } from './searchGymsService'
 
 let gymRepository: InMemoryGymRepository
-let gymService: SearchGymsService
+let gymService: SearchGymService
 
 describe('Search gym Service', () => {
   beforeEach(() => {
     gymRepository = new InMemoryGymRepository()
-    gymService = new SearchGymsService(gymRepository)
+    gymService = new SearchGymService(gymRepository)
   })
   it('Should be able to search gym', async () => {
     await gymRepository.create({

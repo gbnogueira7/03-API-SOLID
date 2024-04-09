@@ -1,8 +1,8 @@
 import { expect, describe, it, beforeEach } from 'vitest'
 import { InMemoryUsersRepository } from '@/repositories/in-memory/in-memory-users-repository'
-import { AuthenticateService } from './athenticateService'
 import { hash } from 'bcryptjs'
 import { InvalidCredentialsError } from './errors/invalid-credential-error'
+import { AuthenticateService } from './authenticateService'
 
 // Aqui eu estou tipando minhas variáveis com classes, o que faz com que quando os its rodarem, antes irá criar uma instância da qual essas variáveis derivam, o que faz com que elas rodem os métodos que atribuem automáticamente
 

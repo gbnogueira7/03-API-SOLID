@@ -2,20 +2,20 @@ import { ResourceNotFoundError } from './errors/resource-not-found'
 import { Gym } from '@prisma/client'
 import { GymRepository } from '@/repositories/gym-repository'
 
-interface SearchGymsServiceRequest {
+interface searchGymServiceRequest {
   query: string
   page: number
 }
-interface SearchGymsServiceResponse {
+interface searchGymServiceResponse {
   gym: Gym[]
 }
 
-export class SearchGymsService {
+export class SearchGymService {
   constructor(private gymRepository: GymRepository) {}
   async execute({
     query,
     page,
-  }: SearchGymsServiceRequest): Promise<SearchGymsServiceResponse> {
+  }: searchGymServiceRequest): Promise<searchGymServiceResponse> {
     const gym = await this.gymRepository.searchMany(query, page)
 
     if (!gym) {
