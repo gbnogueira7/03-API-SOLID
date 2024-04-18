@@ -3,7 +3,7 @@ import { app } from '@/app'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import { createAndAuthenticateUser } from '@/utils/test/create-and-authenticate-user'
 
-describe('Profile(e2e)', () => {
+describe('Create Gym (e2e)', () => {
   beforeAll(async () => {
     await app.ready()
   })
@@ -12,19 +12,20 @@ describe('Profile(e2e)', () => {
     await app.close()
   })
 
-  it('should be able to get user profile', async () => {
+  it('should be able to create gym', async () => {
     const { token } = await createAndAuthenticateUser(app)
 
-    const profileResponse = await request(app.server)
-      .get('/me')
+    const response = await request(app.server)
+      .post('/post/gyms')
       .set('Authorization', `Bearer ${token}`)
-      .send()
+      .send({
+        description: 'javascript gym description',
+        latitude: -23.0260736,
+        longitude: -43.4733056,
+        phone: '21999999999',
+        title: 'javascript gym',
+      })
 
-    expect(profileResponse.statusCode).toEqual(200)
-    expect(profileResponse.body.user).toEqual(
-      expect.objectContaining({
-        email: 'jondoe@rocketseat.com',
-      }),
-    )
+    expect(response.statusCode).toEqual(201)
   })
 })

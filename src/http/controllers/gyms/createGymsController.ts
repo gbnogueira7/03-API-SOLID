@@ -26,6 +26,5 @@ export async function createGym(request: FastifyRequest, reply: FastifyReply) {
     phone,
     title,
   })
-
   return reply.status(201).send()
 }

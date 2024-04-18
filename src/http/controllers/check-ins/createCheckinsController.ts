@@ -19,8 +19,8 @@ export async function createCheckin(
     }),
   })
 
-  const { latitude, longitude } = createCheckinBodySchema.parse(request.params)
-  const { gymId } = createCheckinsParamsSchema.parse(request.body)
+  const { latitude, longitude } = createCheckinBodySchema.parse(request.body)
+  const { gymId } = createCheckinsParamsSchema.parse(request.params)
 
   const createCheckinService = MakeCreateCreckinFactorie()
   await createCheckinService.execute({
