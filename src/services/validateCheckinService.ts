@@ -19,11 +19,9 @@ export class ValidateCheckinService {
   }: ValidateCheckinServiceRequest): Promise<ValidateCheckinServiceResponse> {
     const checkIn = await this.checkinRepository.findById(checkInId)
     if (!checkIn) {
-      console.log('aqui')
 
       throw new ResourceNotFoundError()
     }
-    console.log('tá fora')
 
     const distanceInMinutesFromCheckinCreation = dayjs(new Date()).diff(
       checkIn.created_at,
@@ -31,11 +29,9 @@ export class ValidateCheckinService {
     )
 
     if (distanceInMinutesFromCheckinCreation > 20) {
-      console.log('lonjão')
 
       throw new LateCheckinValidationError()
     }
-    console.log('calabreso')
 
     checkIn.validated_at = new Date()
 

@@ -37,7 +37,6 @@ describe('Validate Checkin (e2e)', () => {
       .set('Authorization', `Bearer ${token}`)
       .send()
 
-    console.log(response.statusCode)
     expect(response.statusCode).toEqual(204)
   })
 })
