@@ -25,6 +25,10 @@ describe('Refresh Token(e2e)', () => {
 
     const cookies = authResponse.get('Set-Cookie')
 
+    if (cookies === undefined) {
+      throw new Error('Set-Cookie not found')
+    }
+
     const response = await request(app.server)
       .patch('/token/refresh')
       .set('Cookie', cookies)
